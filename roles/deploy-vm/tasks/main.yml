@@ -1,45 +1,24 @@
 ---
-- name: Create Azure VM
-  hosts: localhost
-  connection: local
-  tasks:
-  - name: Create public IP address
-    azure_rm_publicipaddress:
-      resource_group: ose
-      allocation_method: Static
-      name: myTestEIP 
-  - name: Create Network Security Group that allows SSH
-    azure_rm_securitygroup:
-      resource_group: ose
-      name: allowSSH
-      rules:
-        - name: SSH
-          protocol: Tcp
-          destination_port_range: 22
-          access: Allow
-          priority: 1000
-          direction: Inbound
-  - name: Create virtual network inteface card
-    azure_rm_networkinterface:
-      resource_group: ose
-      name: myTestNIC
-      virtual_network: myVPC
-      subnet: jumphosts
-      public_ip_name: myTestEIP
-      security_group: allowSSH
-  - name: Create VM
-    azure_rm_virtualmachine:
-      resource_group: ose
-      name: myTestVM
-      vm_size: Standard_DS2_v3
-      admin_username: azureuser
-      ssh_password_enabled: false
-      ssh_public_keys:
-        - path: /home/azureuser/.ssh/authorized_keys
-          key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDEi1Yie7wY9O13MlEgYZ2CDa7rxXDOv+1tmQCIkmy5GY89FQF9ik4KVRTNkf4Y7lNkJMFTSkQ4UwF3f1GBm4zpQ9pTb9LOj7ZtTKG7qS8u6h98SBA0UdrIVkuF2TLltZp4BDopmBTwWHX52aL5zE9VLBzXEfNRdfo+ehHSicJMZMcJmG2rkvHO2h5C5VPuUodSTbW1G6z93NpcRkwJxlxRrkbhc18qTeaP9f8wETY8pBZqq9uesAKoqogUKq943mspj2msNL/atvjjGNzHR/8/YiLqC9Uyx+RFBnCfdjekye1D6fsvAzoaZz2ou5waYsI64EQDy2vcvdOe0eSeKzEMSEIF5j4ZSi9VsZBhXe+N+2r8ibPzkvFowf56VEDFhYh7nXQynk02XQAp58jwTSHUax7v/aA815Uqj7xc/AnW1LOLw7SUe1j31KL7YOn3tVz85lOZ6q3oGlQfF27aRzY9BZ14XKe2ayHmJtWb5QWLaz0mMCU+UA3Gdoodf4xzWqgPJTkJhIWcoHnSZI2ZCZF6SMRKbu+gAqnAOxXBMkhzH+RUJFpsuUa8IaPTaUC2ZLu+semwOYt2/8DEwUIzb2YKg6zOLKTg2u61unK7R9Qf7ZZrBeyxVzwj/o0cWmqS+Oezbf/em51ctBHahmhV6I3HrJQ+5Pe7LgJjLDleP8LcIw== hans.thienpondt@nokia.com"
-      network_interfaces: myTestNIC
-      image:
-        offer: RHEL
-        publisher: RedHat
-        sku: '7.4'
-        version: latest
+- name: Create virtual network interface card
+  azure_rm_networkinterface:
+    resource_group: "{{ resource_group }}"
+    name: "{{ inventory_hostname }}NIC"
+    virtual_network: "{{ virtualnetwork[0].name }}"
+    subnet: ose_masters
+    security_group: allowSSH
+- name: Create VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    name: "{{ inventory_hostname }}"
+    vm_size: Standard_D2s_v3
+    admin_username: azureuser
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: /home/azureuser/.ssh/authorized_keys
+        key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDhz9g9sKMcX1tjaFkjIFtOfSa9YeKcJB4nx9/1fKpoz5j00E5w42C9hWJptYGLxWll9GlmFT0lbN7ZL+8jZmTWEZbPjrMUdrC8UC6pDmhNF9g+5h6RErFjPhlBbNSvvAb7ijfx0txDbUARY/418sGR6a7bxpofn/Wp5VBCPuLf3EP9AqX0Ph8hd1y2VOjlisFnOrbn5uW1IhjzihD3bNqi1pvBEa5ZzTez0iONjE7vLf++zr5bTbn59s8z8h/c3FNanLPSvXvClrFAzceTJ2g8qh8VBlZ1vzbkrAzIUKIQ/dRmjKdFyMe/OcxtesqUegj8E4Z6dsCznhT2fKPTHhRR root@SDN-Controllers"
+    network_interfaces: "{{ inventory_hostname }}NIC"
+    image:
+      offer: RHEL
+      publisher: RedHat
+      sku: '7-RAW'
+      version: 7.4.2018010506

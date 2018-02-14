@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  serial: 1
+  roles:
+    - deploy-networks

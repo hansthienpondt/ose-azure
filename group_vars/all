@@ -1,0 +1,22 @@
+---
+resource_group: ose
+virtualnetwork: 
+  - { name: "myVPC",
+      cidr: "10.0.0.0/8" }
+
+subnets:
+  - { name: "gateways",
+      cidr: "10.0.0.0/24",
+      vnet: "myVPC" }
+  - { name: "jumphosts",
+      cidr: "10.0.1.0/24",
+      vnet: "myVPC" }
+  - { name: "ose_masters",
+      cidr: "10.0.2.0/24",
+      vnet: "myVPC" }
+  - { name: "ose_infra",
+      cidr: "10.0.3.0/24",
+      vnet: "myVPC" }
+  - { name: "ose_workers",
+      cidr: "10.0.4.0/24",
+      vnet: "myVPC" }

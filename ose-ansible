@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+# Wrapper around ansible-playbook for the installation of OSE/Azure components
+
+$(which ansible-playbook) -i hosts $@

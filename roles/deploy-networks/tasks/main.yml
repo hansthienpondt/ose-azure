@@ -1,40 +1,14 @@
 ---
-- name: Create Azure VPC
-  hosts: localhost
-  connection: local
-  tasks:
-  - name: Create virtual network
-    azure_rm_virtualnetwork:
-      resource_group: ose
-      name: myVPC
-      address_prefixes: "10.0.0.0/8"
-  - name: Add subnet [ gateways ]
-    azure_rm_subnet:
-      resource_group: ose
-      name: gateways
-      address_prefix: "10.0.0.0/24"
-      virtual_network: myVPC
-  - name: Add subnet [ jumphosts ]
-    azure_rm_subnet:
-      resource_group: ose
-      name: jumphosts
-      address_prefix: "10.0.1.0/24"
-      virtual_network: myVPC
-  - name: Add subnet [ ose_masters ]
-    azure_rm_subnet:
-      resource_group: ose
-      name: ose_masters
-      address_prefix: "10.0.2.0/24"
-      virtual_network: myVPC
-  - name: Add subnet [ ose_infra ]
-    azure_rm_subnet:
-      resource_group: ose
-      name: ose_infra
-      address_prefix: "10.0.3.0/24"
-      virtual_network: myVPC
-  - name: Add subnet [ ose_workers ]
-    azure_rm_subnet:
-      resource_group: ose
-      name: ose_workers
-      address_prefix: "10.0.4.0/24"
-      virtual_network: myVPC
+- name: Create virtual network
+  with_items: "{{ virtualnetwork }}"
+  azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group }}"
+    name: "{{ item.name }}"
+    address_prefixes: "{{ item.cidr }}"
+- name: Add subnets
+  with_items: "{{ subnets }}"
+  azure_rm_subnet:
+    resource_group: "{{ resource_group }}"
+    name: "{{ item.name }}"
+    address_prefix: "{{ item.cidr }}"
+    virtual_network: "{{ item.vnet }}"

@@ -1,0 +1,7 @@
+---
+- hosts: ose-masters
+  connection: local
+  gather_facts: no
+  serial: 1
+  roles:
+    - deploy-vm
