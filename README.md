@@ -1,5 +1,6 @@
 # ose-azure
 
+```
 mkdir $HOME/.azure
 touch $HOME/.azure/credentials
 
@@ -10,3 +11,5 @@ client_id=
 secret=
 tenant=
 EOF
+```
+
