@@ -4,7 +4,7 @@
 mkdir $HOME/.azure
 touch $HOME/.azure/credentials
 
-cat << EOF > $HOME/.azure/credentials2
+cat << EOF > $HOME/.azure/credentials
 [default]
 subscription_id=
 client_id=
