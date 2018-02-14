@@ -1,0 +1,7 @@
+---
+virtual_network: myVPC
+subnet: ose_masters
+security_group: allowSSH
+vm_size: "Standard_D2s_v3"
+admin_username: azureuser
+key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDhz9g9sKMcX1tjaFkjIFtOfSa9YeKcJB4nx9/1fKpoz5j00E5w42C9hWJptYGLxWll9GlmFT0lbN7ZL+8jZmTWEZbPjrMUdrC8UC6pDmhNF9g+5h6RErFjPhlBbNSvvAb7ijfx0txDbUARY/418sGR6a7bxpofn/Wp5VBCPuLf3EP9AqX0Ph8hd1y2VOjlisFnOrbn5uW1IhjzihD3bNqi1pvBEa5ZzTez0iONjE7vLf++zr5bTbn59s8z8h/c3FNanLPSvXvClrFAzceTJ2g8qh8VBlZ1vzbkrAzIUKIQ/dRmjKdFyMe/OcxtesqUegj8E4Z6dsCznhT2fKPTHhRR root@SDN-Controllers"

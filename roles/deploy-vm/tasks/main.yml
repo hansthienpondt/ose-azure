@@ -3,19 +3,20 @@
   azure_rm_networkinterface:
     resource_group: "{{ resource_group }}"
     name: "{{ inventory_hostname }}NIC"
-    virtual_network: "{{ virtualnetwork[0].name }}"
-    subnet: ose_masters
-    security_group: allowSSH
+    virtual_network: "{{ virtual_network }}"
+    subnet: "{{ subnet }}"
+    security_group: "{{ security_group }}"
+    public_ip: no
 - name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"
     name: "{{ inventory_hostname }}"
-    vm_size: Standard_D2s_v3
-    admin_username: azureuser
+    vm_size: "{{ vm_size }}"
+    admin_username: "{{ admin_username }}"
     ssh_password_enabled: false
     ssh_public_keys:
-      - path: /home/azureuser/.ssh/authorized_keys
-        key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDhz9g9sKMcX1tjaFkjIFtOfSa9YeKcJB4nx9/1fKpoz5j00E5w42C9hWJptYGLxWll9GlmFT0lbN7ZL+8jZmTWEZbPjrMUdrC8UC6pDmhNF9g+5h6RErFjPhlBbNSvvAb7ijfx0txDbUARY/418sGR6a7bxpofn/Wp5VBCPuLf3EP9AqX0Ph8hd1y2VOjlisFnOrbn5uW1IhjzihD3bNqi1pvBEa5ZzTez0iONjE7vLf++zr5bTbn59s8z8h/c3FNanLPSvXvClrFAzceTJ2g8qh8VBlZ1vzbkrAzIUKIQ/dRmjKdFyMe/OcxtesqUegj8E4Z6dsCznhT2fKPTHhRR root@SDN-Controllers"
+      - path: "/home/{{ admin_username }}/.ssh/authorized_keys"
+        key_data: "{{ key_data }}"
     network_interfaces: "{{ inventory_hostname }}NIC"
     image:
       offer: RHEL

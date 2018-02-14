@@ -12,3 +12,14 @@
     name: "{{ item.name }}"
     address_prefix: "{{ item.cidr }}"
     virtual_network: "{{ item.vnet }}"
+- name: Create Network Security Group that allows SSH
+  azure_rm_securitygroup:
+    resource_group: "{{ resource_group }}"
+    name: allowSSH
+    rules:
+      - name: SSH
+        protocol: Tcp
+        destination_port_range: 22
+        access: Allow
+        priority: 1000
+        direction: Inbound
