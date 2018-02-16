@@ -1,0 +1,18 @@
+---
+- name: Downloading the EPEL repository definitions (RHEL 7.4)
+  get_url: url=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm dest={{ ansible_env.HOME }}/epel-release-latest-7.noarch.rpm
+
+- name: Downloading and enable the EPEL repository definitions (RHEL 7.4)
+  yum: name={{ ansible_env.HOME }}/epel-release-latest-7.noarch.rpm state=present
+
+- name: Install strongSwan (CentOS)
+  yum: pkg=strongswan state=present
+
+- name: Configure ipsec.conf
+  template: src=ipsec.conf.j2 dest={{ strongswan_base }}/ipsec.conf owner=root group=root mode=0644
+  notify: restart strongswan
+
+- name: Configure ipsec.secrets
+  template: src=ipsec.secrets.j2 dest={{ strongswan_base }}/ipsec.secrets owner=root group=root mode=0600
+  notify: restart strongswan
+

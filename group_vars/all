@@ -20,3 +20,6 @@ subnets:
   - { name: "ose_workers",
       cidr: "10.0.4.0/24",
       vnet: "myVPC" }
+
+strongswan_base: /etc/strongswan
+strongswan_service: strongswan

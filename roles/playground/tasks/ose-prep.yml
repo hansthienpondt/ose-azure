@@ -1,0 +1,20 @@
+---
+- name: Install additional packages to modify VSC qcow image and run VSC as VM - RedHat Host
+  yum: name={{ item }} state=present
+  with_items:
+   - wget
+   - git
+   - net-tools
+   - bind-utils
+   - iptables-services
+   - bridge-utils
+   - bash-completion
+   - kexec-tools
+   - sos
+   - psacct
+
+
+- name: Install Docker
+  yum: name={{ item }} state=present
+  with_items:
+   - docker-1.12.6
