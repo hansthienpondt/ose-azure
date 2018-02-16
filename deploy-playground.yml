@@ -1,0 +1,6 @@
+---
+- hosts: ose
+  gather_facts: no
+  serial: 1
+  roles:
+    - playground

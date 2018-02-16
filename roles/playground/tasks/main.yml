@@ -1,0 +1,54 @@
+---
+- name: create /root/.ssh
+  file: path=/root/.ssh state=directory
+
+- name: copy {{ admin_username }} ssh key toward root
+  copy:
+    src: /root/.ssh/id_rsa.pub
+    dest: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Register as user "{{ rhel_user }}" with password --REDACTED-- and auto-subscribe to pool "{{ rhel_pool }}"
+  redhat_subscription:
+    state: present
+    username: "{{ rhel_user }}"
+    password: "{{ rhel_pass }}"
+    pool_ids: "{{ rhel_pool }}"
+
+- name: set SELinux to permissive
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: disable and stop firewalld in systemctl
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: False
+
+- name: Install pre-requisites ose-host_preparation
+  yum: name={{ item }} state=present
+  with_items:
+   - wget
+   - git
+   - net-tools
+   - bind-utils
+   - iptables-services
+   - bridge-utils
+   - bash-completion
+   - kexec-tools
+   - sos
+   - psacct
+
+- name: Install Docker
+  yum: name={{ item }} state=present
+  with_items:
+   - docker-1.12.6
+
+- name: Enable and Start Docker in systemctl
+  systemd:
+    name: docker
+    state: started
+    enabled: True
