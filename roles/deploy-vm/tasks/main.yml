@@ -7,6 +7,8 @@
     subnet: "{{ subnet }}"
     security_group: "{{ security_group }}"
     public_ip: no
+    private_ip_allocation_method: "{{ private_ip_allocation_method }}"
+    private_ip_address: "{{ private_ip_address }}"
 - name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"

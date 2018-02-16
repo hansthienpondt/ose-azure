@@ -1,3 +1,6 @@
+ansible_ssh_user=azureuser
+ansible_become=True
+
 [ose-masters]
 ose-master1
 ose-master2
