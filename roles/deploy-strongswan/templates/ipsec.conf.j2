@@ -15,7 +15,7 @@ conn %default
 
 # Connections will be added here
 
-{% for host in groups['vpn'] %}
+{% for host in groups['ose'] %}
 {% if not ansible_hostname == hostvars[host].ansible_hostname %}
 conn {{ hostvars[host].ansible_hostname }}
  type=tunnel

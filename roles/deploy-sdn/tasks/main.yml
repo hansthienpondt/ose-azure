@@ -1,0 +1,33 @@
+---
+- name: Create virtual network interface card
+  azure_rm_networkinterface:
+    resource_group: "{{ resource_group }}"
+    name: "{{ inventory_hostname }}NIC"
+    virtual_network: "{{ virtual_network }}"
+    subnet: "{{ subnet }}"
+    security_group: "{{ security_group }}"
+    public_ip: True
+    public_ip_allocation_method: "Static"
+    private_ip_allocation_method: "Static"
+    private_ip_address: "10.0.1.5"
+- name: Create VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    name: "{{ inventory_hostname }}"
+    vm_size: "{{ vm_size }}"
+    admin_username: "{{ admin_username }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ admin_username }}/.ssh/authorized_keys"
+        key_data: "{{ key_data }}"
+    network_interfaces: "{{ inventory_hostname }}NIC"
+    image:
+      offer: CentOS
+      publisher: OpenLogic
+      sku: '7.4'
+      version: latest
+    managed_disk_type: Premium_LRS
+    data_disks:
+        - lun: 0
+          disk_size_gb: 1023
+          managed_disk_type: Standard_LRS

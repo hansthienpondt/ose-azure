@@ -1,7 +1,23 @@
-ansible_ssh_user=azureuser
+ansible_ssh_user=nuageadmin
 ansible_become=True
 
+[sdn-controller]
+sdn-jump1
+
+[ose:children]
+ose-masters
+ose-infra
+ose-workers
+
 [ose-masters]
-ose-master1
-ose-master2
-ose-master3
+ose-master1.nuage.local
+ose-master2.nuage.local
+ose-master3.nuage.local
+
+[ose-infra]
+ose-infra1.nuage.local
+ose-infra2.nuage.local
+
+[ose-workers]
+ose-worker1.nuage.local
+ose-worker2.nuage.local

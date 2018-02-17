@@ -1,5 +1,5 @@
 ---
-resource_group: ose
+resource_group: ose-uksouth
 virtualnetwork: 
   - { name: "myVPC",
       cidr: "10.0.0.0/8" }
@@ -8,7 +8,7 @@ subnets:
   - { name: "gateways",
       cidr: "10.0.0.0/24",
       vnet: "myVPC" }
-  - { name: "jumphosts",
+  - { name: "sdn_jump",
       cidr: "10.0.1.0/24",
       vnet: "myVPC" }
   - { name: "ose_masters",
