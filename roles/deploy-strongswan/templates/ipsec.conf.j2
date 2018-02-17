@@ -15,7 +15,7 @@ conn %default
 
 # Connections will be added here
 
-{% for host in groups['ose'] %}
+{% for host in groups['ose-masters'] %}
 {% if not ansible_hostname == hostvars[host].ansible_hostname %}
 conn {{ hostvars[host].ansible_hostname }}
  type=tunnel
@@ -23,10 +23,10 @@ conn {{ hostvars[host].ansible_hostname }}
  esp=aes128-sha1,3des-sha1
  left={{ ansible_eth0.ipv4.address }}
  leftfirewall=yes
- leftsubnet={{ ansible_eth0.ipv4.network }}/32
+ leftsubnet={{ ansible_eth0.ipv4.address }}/32
  leftid={{ ansible_eth0.ipv4.address }}
  right={{ hostvars[host].ansible_eth0.ipv4.address }}
- rightsubnet={{ hostvars[host].ansible_eth0.ipv4.network }}/32
+ rightsubnet={{ hostvars[host].ansible_eth0.ipv4.address }}/32
  rightid={{ hostvars[host].ansible_eth0.ipv4.address }}
  dpddelay=30
  dpdtimeout=120

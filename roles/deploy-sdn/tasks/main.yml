@@ -2,7 +2,7 @@
 - name: Create virtual network interface card
   azure_rm_networkinterface:
     resource_group: "{{ resource_group }}"
-    name: "{{ inventory_hostname }}NIC"
+    name: "{{ inventory_hostname_short }}NIC"
     virtual_network: "{{ virtual_network }}"
     subnet: "{{ subnet }}"
     security_group: "{{ security_group }}"
@@ -13,14 +13,14 @@
 - name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"
-    name: "{{ inventory_hostname }}"
+    name: "{{ inventory_hostname_short }}"
     vm_size: "{{ vm_size }}"
     admin_username: "{{ admin_username }}"
     ssh_password_enabled: false
     ssh_public_keys:
       - path: "/home/{{ admin_username }}/.ssh/authorized_keys"
         key_data: "{{ key_data }}"
-    network_interfaces: "{{ inventory_hostname }}NIC"
+    network_interfaces: "{{ inventory_hostname_short }}NIC"
     image:
       offer: CentOS
       publisher: OpenLogic

@@ -1,6 +1,3 @@
-ansible_ssh_user=nuageadmin
-ansible_become=True
-
 [sdn-controller]
 sdn-jump1
 
@@ -8,6 +5,10 @@ sdn-jump1
 ose-masters
 ose-infra
 ose-workers
+
+[ose:vars]
+ansible_user=nuageadmin
+ansible_become=True
 
 [ose-masters]
 ose-master1.nuage.local

@@ -17,6 +17,11 @@
     password: "{{ rhel_pass }}"
     pool_ids: "{{ rhel_pool }}"
 
+#- name: Disable all repos
+#  shell: "yum-config-manager --disable \\\*"
+
+- name: Enable only the repositories required by OpenShift Container Platform 3.7
+  shell: subscription-manager repos --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-server-ose-3.7-rpms" --enable="rhel-7-fast-datapath-rpms"
 - name: set SELinux to permissive
   selinux:
     policy: targeted
@@ -27,6 +32,11 @@
     name: firewalld
     state: stopped
     enabled: False
+
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
 
 - name: Install pre-requisites ose-host_preparation
   yum: name={{ item }} state=present
@@ -41,6 +51,7 @@
    - kexec-tools
    - sos
    - psacct
+   - atomic-openshift-utils
 
 - name: Install Docker
   yum: name={{ item }} state=present
@@ -52,3 +63,27 @@
     name: docker
     state: started
     enabled: True
+
+- name: create /root/nuage-docker
+  file: path=/root/nuage-docker state=directory
+
+- name: "copy {{ item }}"
+  copy:
+    src: "/data/nuage_software/5.2.1/unzip/openshift/docker/{{ item }}"
+    dest: "/root/nuage-docker/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - nuage-cni-docker-5.2.1-6.tar
+    - nuage-infra-docker-5.2.1-7.tar
+    - nuage-master-docker-5.2.1-7.tar
+    - nuage-vrs-docker-5.2.1-10.tar
+
+- name: load docker images
+  shell: "docker load -i /root/nuage-docker/{{ item }}"
+  with_items:
+    - nuage-cni-docker-5.2.1-6.tar
+    - nuage-infra-docker-5.2.1-7.tar
+    - nuage-master-docker-5.2.1-7.tar
+    - nuage-vrs-docker-5.2.1-10.tar

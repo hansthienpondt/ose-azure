@@ -1,5 +1,5 @@
 ---
-- hosts: ose
+- hosts: ose-masters
   connection: local
   gather_facts: no
   serial: 1
