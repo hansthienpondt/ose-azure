@@ -1,5 +1,5 @@
 ---
-- hosts: ose-masters
+- hosts: ose
   gather_facts: yes
   roles:
     - deploy-strongswan

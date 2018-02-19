@@ -13,6 +13,7 @@
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"
     name: "{{ inventory_hostname_short }}"
+    short_hostname: "{{ inventory_hostname }}"
     vm_size: "{{ vm_size }}"
     admin_username: "{{ admin_username }}"
     ssh_password_enabled: false
