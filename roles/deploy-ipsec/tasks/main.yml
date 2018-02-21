@@ -1,7 +1,4 @@
 ---
-- debug: 
-    msg: "{{ ansible_hostname }} {{ ansible_eth0.ipv4.address }}"
-
 - name: Downloading the EPEL repository definitions (RHEL 7.4)
   get_url: url=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm dest=/root/epel-release-latest-7.noarch.rpm
 
@@ -11,11 +8,34 @@
 - name: Install strongSwan (CentOS)
   yum: pkg=strongswan state=present
 
-- name: disable and stop firewalld in systemctl
+- name: enable and start strongswan in systemctl
   systemd:
     name: strongswan
     state: started
     enabled: True
+
+- iptables: Accept IPSEC/AH Traffic
+    chain: OS_FIREWALL_ALLOW
+    protocol: ah
+    jump: ACCEPT
+  become: yes
+- iptables: Accept IPSEC/ESP Traffic
+    chain: OS_FIREWALL_ALLOW
+    protocol: esp
+    jump: ACCEPT
+  become: yes
+- iptables: Accept IPSEC/IKEv2 Traffic
+    chain: OS_FIREWALL_ALLOW
+    protocol: udp
+    destination_port: 500
+    jump: ACCEPT
+  become: yes
+- iptables: Accept IPSEC/NAT-T Traffic
+    chain: OS_FIREWALL_ALLOW
+    protocol: udp
+    destination_port: 4500
+    jump: ACCEPT
+  become: yes
 
 - name: Configure ipsec.conf
   template: src=ipsec.conf.j2 dest={{ strongswan_base }}/ipsec.conf owner=root group=root mode=0644
