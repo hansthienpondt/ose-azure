@@ -14,28 +14,19 @@
     state: started
     enabled: True
 
-- iptables: Accept IPSEC/AH Traffic
-    chain: OS_FIREWALL_ALLOW
-    protocol: ah
-    jump: ACCEPT
-  become: yes
-- iptables: Accept IPSEC/ESP Traffic
-    chain: OS_FIREWALL_ALLOW
-    protocol: esp
-    jump: ACCEPT
-  become: yes
-- iptables: Accept IPSEC/IKEv2 Traffic
-    chain: OS_FIREWALL_ALLOW
-    protocol: udp
-    destination_port: 500
-    jump: ACCEPT
-  become: yes
-- iptables: Accept IPSEC/NAT-T Traffic
-    chain: OS_FIREWALL_ALLOW
-    protocol: udp
-    destination_port: 4500
-    jump: ACCEPT
-  become: yes
+- name: Disable the EPEL repository definitions (RHEL 7.4)
+  shell: sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/epel.repo
+
+- name: Allow Chain OS_FIREWALL_ALLOW in INPUT
+  shell: iptables -I INPUT -j OS_FIREWALL_ALLOW
+- name: Allow IP/ESP (IPSEC) traffic
+  shell: iptables -A OS_FIREWALL_ALLOW -p esp -j ACCEPT
+- name: Allow IP/AH (IPSEC) traffic
+  shell: iptables -A OS_FIREWALL_ALLOW -p ah -j ACCEPT
+- name: Allow UDP/IKEv2 (IPSEC) traffic
+  shell: iptables -A OS_FIREWALL_ALLOW -p udp -m state --state NEW -m udp --dport 500 -j ACCEPT
+- name: Allow UDP/NAT-T (IPSEC) traffic
+  shell: iptables -A OS_FIREWALL_ALLOW -p udp -m state --state NEW -m udp --dport 4500 -j ACCEPT
 
 - name: Configure ipsec.conf
   template: src=ipsec.conf.j2 dest={{ strongswan_base }}/ipsec.conf owner=root group=root mode=0644

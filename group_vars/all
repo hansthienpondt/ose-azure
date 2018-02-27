@@ -1,5 +1,4 @@
 ---
-
 resource_group: ose-uksouth
 virtualnetwork: 
   - { name: "myVPC",
@@ -22,6 +21,8 @@ subnets:
       cidr: "10.0.4.0/24",
       vnet: "myVPC" }
 
+ose_version: 3.7
+nuage_docker_basedir: /data/nuage_software/5.2.2/unzip/openshift/docker
 nuage_cni_docker: nuage-cni-docker-5.2.2-16.tar
 nuage_infra_docker: nuage-infra-docker-5.2.2-16.tar
 nuage_master_docker: nuage-master-docker-5.2.2-16.tar

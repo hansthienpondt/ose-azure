@@ -6,10 +6,10 @@
     virtual_network: "{{ virtual_network }}"
     subnet: "{{ subnet }}"
     security_group: "{{ security_group }}"
-    public_ip: True
-    public_ip_allocation_method: "Static"
-    private_ip_allocation_method: "Static"
-    private_ip_address: "10.0.1.5"
+    public_ip_allocation_method: "{{ public_ip_allocation_method }}"
+    public_ip: "{{ public_ip }}"
+    private_ip_allocation_method: "{{ private_ip_allocation_method }}"
+    private_ip_address: "{{ private_ip_address }}"
 - name: Create VM
   azure_rm_virtualmachine:
     resource_group: "{{ resource_group }}"

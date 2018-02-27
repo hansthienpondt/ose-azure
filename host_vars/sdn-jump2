@@ -2,9 +2,9 @@
 virtual_network: myVPC
 subnet: sdn_jump
 public_ip_allocation_method: Static
-public_ip: True
+public_ip: False
 private_ip_allocation_method: Static
-private_ip_address: 10.0.2.5
+private_ip_address: 10.0.1.6
 security_group: allowSSH
 vm_size: Standard_E8s_v3
 admin_username: nuageadmin
