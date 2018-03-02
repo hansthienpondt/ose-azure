@@ -1,0 +1,9 @@
+---
+virtual_network: myVPC
+subnet: gateways
+private_ip_allocation_method: Static
+private_ip_address: 10.0.0.12
+security_group: allowSSH
+vm_size: Standard_D2s_v3
+admin_username: nuageadmin
+key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD2PBtA2kBVITSwTU1njMixzR/cNvrx5O13W2b9AYNYgB7N9c+GxOKnZ4tn2h+qWPr0PyOtLe8DU5VlNwv7trpcfzWjGozZgc85l97k4L3Znn75E7OT7r9hXvOptoIwxx6wWk7Hi50LL+tZQJxUsSsRS96v09C1Q2rzeoHADuxmOIeeobFKxFIwIuKVUXjlLvFU5XjrVxVEOySh5nu1fOLiSt6+aXUXUchApPvps/ozJmuQvQlfoI2TEYI2hG+qRdGCKNXKxZj/m8wQCqwxHGRFrjmwGCCSqGJ9Mplgss39fHk+AhCoElQkqhSWXxrGlqUjZLV2bg+iIfWQGZiiIxdz root@sdn-jump1"
