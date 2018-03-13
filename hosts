@@ -1,10 +1,12 @@
 [sdn-controller]
 sdn-jump1
+sdn-jump2
 
 [ose:children]
 ose-masters
 ose-infra
 ose-workers
+ose-gws
 
 [ose:vars]
 ansible_user=nuageadmin
@@ -22,3 +24,10 @@ ose-infra2.nuage.local
 [ose-workers]
 ose-worker1.nuage.local
 ose-worker2.nuage.local
+
+[ose-gws]
+ose-gw1.nuage.local
+ose-gw2.nuage.local
+avi-gw1.nuage.local
+avi-gw2.nuage.local
+

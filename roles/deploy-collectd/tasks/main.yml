@@ -1,0 +1,8 @@
+---
+- name: Copy collectd.conf file
+  tempalte: src=collectd.conf.j2 dst=/etc/collectd.conf
+
+- name: Install collectd
+  yum: name=collectd
+
+

@@ -1,0 +1,14 @@
+LoadPlugin interface
+LoadPlugin load
+LoadPlugin memory
+LoadPlugin network
+LoadPlugin ovs_stats
+<Plugin interface>
+    Interface "eth0"
+    Interface "/^veth/"
+    IgnoreSelected false
+</Plugin>
+<Plugin network>
+    <Server "{{ stats_server }}" "25826">
+    </Server>
+</Plugin>
