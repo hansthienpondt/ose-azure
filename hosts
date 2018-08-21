@@ -3,14 +3,14 @@ sdn-jump1
 sdn-jump2
 
 [ose:children]
-ose-masters
-ose-infra
-ose-workers
-ose-gws
+ose-test
 
 [ose:vars]
 ansible_user=nuageadmin
 ansible_become=True
+
+[ose-test]
+ose-test1.nuage.local ansible_host=
 
 [ose-masters]
 ose-master1.nuage.local

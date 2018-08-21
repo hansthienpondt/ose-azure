@@ -1,29 +1,28 @@
 ---
-- name: Create virtual network interface card
-  azure_rm_networkinterface:
-    resource_group: "{{ resource_group }}"
-    name: "{{ inventory_hostname_short }}NIC"
-    virtual_network: "{{ virtual_network }}"
-    subnet: "{{ subnet }}"
-    security_group: "{{ security_group }}"
-    public_ip: no
-    private_ip_allocation_method: "{{ private_ip_allocation_method }}"
-    private_ip_address: "{{ private_ip_address }}"
-- name: Create VM
-  azure_rm_virtualmachine:
-    resource_group: "{{ resource_group }}"
-    name: "{{ inventory_hostname_short }}"
-    short_hostname: "{{ inventory_hostname }}"
-    vm_size: "{{ vm_size }}"
-    admin_username: "{{ admin_username }}"
-    ssh_password_enabled: false
-    ssh_public_keys:
-      - path: "/home/{{ admin_username }}/.ssh/authorized_keys"
-        key_data: "{{ key_data }}"
-    network_interfaces: "{{ inventory_hostname_short }}NIC"
-    managed_disk_type: Premium_LRS
-    image:
-      offer: RHEL
-      publisher: RedHat
-      sku: '7-RAW'
-      version: 7.4.2018010506
+- name: debug
+  debug:
+    msg: "{{ groups['ose-masters'] | length}}"
+
+#- name: Create virtual network interface card
+#  azure_rm_deployment:
+#    state: present
+#    subscription_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+#    resource_group_name: dev-ops-cle
+#    parameters:
+#      newStorageAccountName:
+#        value: devopsclestorage1
+#      adminUsername:
+#        value: devopscle
+#      dnsNameForPublicIP:
+#        value: devopscleazure
+#      location:
+#        value: West US
+#      vmSize:
+#        value: Standard_A2
+#      vmName:
+#        value: ansibleSshVm
+#      sshKeyData:
+#        value: YOUR_SSH_PUBLIC_KEY
+#    template_link: 'https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-sshkey/azuredeploy.json'
+#  register: azure
+

@@ -17,14 +17,23 @@
     password: "{{ rhel_pass }}"
     pool_ids: "{{ rhel_pool }}"
 
-- name: Disable all the enabled RHSM repositories
-  shell: subscription-manager repos --disable="*"
+- name: Disable all RHSM repositories
+  rhsm_repository:
+    name: '*'
+    state: disabled
 
 - name: Use yum-config-manager to disable the remaining yum repositories
   shell: 'yum-config-manager --disable \*'
 
 - name: Enable only the repositories required by OpenShift Container Platform {{ ose_version }}
-  shell: subscription-manager repos --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-server-ose-{{ ose_version }}-rpms" --enable="rhel-7-fast-datapath-rpms"
+  rhsm_repository:
+    name: "{{ item }}"
+    state: enabled
+  with_items:
+    - "rhel-7-server-rpms"
+    - "rhel-7-server-extras-rpms"
+    - "rhel-7-server-ose-{{ ose_version }}-rpms"
+    - "rhel-7-fast-datapath-rpms"
 
 - name: set SELinux to permissive
   selinux:
@@ -32,7 +41,16 @@
     state: permissive
 
 - name: set SELinux to permissive in config
-  shell: 'echo -e \\nSELINUX=permissive\\nSELINUXTYPE=targeted >> /etc/selinux/config'
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^#SELINUX='
+    line: 'SELINUX=permissive'
+
+- name: set SELinuxType to targeted in config
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^#SELINUXTYPE='
+    line: 'SELINUX=targeted'
 
 - name: disable and stop firewalld in systemctl
   systemd:
@@ -86,15 +104,20 @@
     group: root
     mode: 0644
   with_items:
-    - "{{ nuage_cni_docker }}"
-    - "{{ nuage_infra_docker }}"
-    - "{{ nuage_master_docker }}"
-    - "{{ nuage_vrs_docker }}"
+    - "{{ nuage_cni_image }}"
+    - "{{ nuage_infra_image }}"
+    - "{{ nuage_master_image }}"
+    - "{{ nuage_vrs_image }}"
+    - "{{ nuage_strongswan_image | default('') }}"
+    - "{{ nuage_bootstrap_agent | default('') }}"
 
 - name: Load Docker Nuage Software images
-  shell: "docker load -i /root/nuage-docker/{{ item }}"
+  docker_image:
+    load_path: "/root/nuage-docker/{{ item }}"
+    state: present
   with_items:
-    - "{{ nuage_cni_docker }}"
-    - "{{ nuage_infra_docker }}"
-    - "{{ nuage_master_docker }}"
-    - "{{ nuage_vrs_docker }}"
+    - "{{ nuage_cni_image }}"
+    - "{{ nuage_infra_image }}"
+    - "{{ nuage_master_image }}"
+    - "{{ nuage_vrs_image }}"
+    - "{{ nuage_strongswan_image | default('') }}"

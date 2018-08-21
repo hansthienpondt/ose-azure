@@ -22,11 +22,10 @@ subnets:
       vnet: "myVPC" }
 
 ose_version: 3.7
-nuage_docker_basedir: /data/nuage_software/5.2.2/unzip/openshift/docker
-nuage_cni_docker: nuage-cni-docker-5.2.2-16.tar
-nuage_infra_docker: nuage-infra-docker-5.2.2-16.tar
-nuage_master_docker: nuage-master-docker-5.2.2-16.tar
-nuage_vrs_docker: nuage-vrs-docker-5.2.2-25.tar
+nuage_image_basedir: /root/5.3.2/unzip/ose
+nuage_cni_image: nuage-cni-docker-5.3.2-20.tar
+nuage_infra_image: nuage-master-docker-5.3.2-21.tar
+nuage_master_image: nuage-master-docker-5.3.2-21.tar
+nuage_vrs_image: nuage-vrs-docker-5.3.2-28.tar
+nuage_strongswan_image: nuage-strongswan-docker-5.3.2-28.tar
 
-strongswan_base: /etc/strongswan
-strongswan_service: strongswan

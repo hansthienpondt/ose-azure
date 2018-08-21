@@ -1,5 +1,0 @@
----
-- hosts: ose
-  gather_facts: yes
-  roles:
-  - deploy-ipsec
