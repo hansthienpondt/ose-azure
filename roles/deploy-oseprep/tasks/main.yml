@@ -1,15 +1,4 @@
 ---
-- name: create /root/.ssh
-  file: path=/root/.ssh state=directory
-
-- name: copy {{ admin_username }} ssh key toward root
-  copy:
-    src: /root/.ssh/id_rsa.pub
-    dest: /root/.ssh/authorized_keys
-    owner: root
-    group: root
-    mode: 0644
-
 - name: Register as user "{{ rhel_user }}" with password --REDACTED-- and auto-subscribe to pool "{{ rhel_pool }}"
   redhat_subscription:
     state: present
@@ -22,8 +11,8 @@
     name: '*'
     state: disabled
 
-- name: Use yum-config-manager to disable the remaining yum repositories
-  shell: 'yum-config-manager --disable \*'
+#- name: Use yum-config-manager to disable the remaining yum repositories
+#  shell: 'yum-config-manager --disable \*'
 
 - name: Enable only the repositories required by OpenShift Container Platform {{ ose_version }}
   rhsm_repository:
@@ -43,14 +32,14 @@
 - name: set SELinux to permissive in config
   lineinfile:
     path: /etc/selinux/config
-    regexp: '^#SELINUX='
+    regexp: '^#?SELINUX=[a-zA-Z]+'
     line: 'SELINUX=permissive'
 
 - name: set SELinuxType to targeted in config
   lineinfile:
     path: /etc/selinux/config
-    regexp: '^#SELINUXTYPE='
-    line: 'SELINUX=targeted'
+    regexp: '^#?SELINUXTYPE=[a-zA-Z]+'
+    line: 'SELINUXTYPE=targeted'
 
 - name: disable and stop firewalld in systemctl
   systemd:
@@ -98,7 +87,7 @@
 
 - name: "Copy Nuage Software"
   copy:
-    src: "{{ nuage_docker_basedir }}/{{ item }}"
+    src: "{{ nuage_image_basedir }}/{{ item }}"
     dest: "/root/nuage-docker/{{ item }}"
     owner: root
     group: root
@@ -113,6 +102,7 @@
 
 - name: Load Docker Nuage Software images
   docker_image:
+    name: "{{ item.split("-")[0]/item.split("-")[1] }}"
     load_path: "/root/nuage-docker/{{ item }}"
     state: present
   with_items:

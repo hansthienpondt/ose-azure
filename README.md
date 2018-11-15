@@ -1,7 +1,9 @@
 # ose-azure
 
 ```
-pre-requisite: pip install ansible[azure]
+pre-requisites:
+  - pip install ansible[azure]
+  - pip install docker
 
 mkdir $HOME/.azure
 touch $HOME/.azure/credentials
